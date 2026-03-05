@@ -1,0 +1,125 @@
+---
+title: "Only Thing Elon Is Right About"
+author: "Simulation Theory"
+format: pdf
+editor: visual
+---
+
+Optimistic Data Simulation
+
+```{r}
+
+# Approach 1 : Simulated Data w optimisitc view on program impact
+
+# Updated Data Generation for Optimistic Approach
+set.seed(123)
+
+n <- 1000
+
+# Race (1: White, 2: Black, 3: Hispanic, 4: Other)
+race <- sample(1:4, n, replace = TRUE, prob = c(0.5, 0.2, 0.2, 0.1))
+
+# Income, affected by race and restricted to 0-100 percentile range
+income_optimistic <- rnorm(n, mean = 50, sd = 15)
+
+# WIC Participation, based on income
+cutoff <- 25
+wic_participation_optimistic <- ifelse(income_optimistic <= cutoff, 1, 0)
+
+# Pre-existing Conditions (PEC)
+pre_existing_conditions_optimistic <- rbinom(n, 1, 0.2)
+
+# Maternal Nutrition, influenced by WIC, PEC, and Income
+maternal_nutrition_optimistic <- 50 + (10 * wic_participation_optimistic) - 
+                                 (5 * pre_existing_conditions_optimistic) + 
+                                 (1.5 * income_optimistic) + rnorm(n, 0, 2)
+
+# Healthcare Access, influenced by WIC, Income, and Race
+healthcare_access_optimistic <- 25 + (8 * wic_participation_optimistic) - 
+                                  (1.5 * income_optimistic) - 
+                                  (race == 2) * 5 + rnorm(n, 0, 2)
+
+# Age of the mother
+age <- sample(15:45, n, replace = TRUE)
+
+# Birth Weight, with a stronger relationship to Income
+birth_weight_optimistic <- 2000 + 
+                           (100 * wic_participation_optimistic) + 
+                           (10 * maternal_nutrition_optimistic) + 
+                           (7.5 * healthcare_access_optimistic) - 
+                           (20 * pre_existing_conditions_optimistic) + 
+                           (5 * income_optimistic) - 
+                           (age < 20) * 150 - 
+                           (age > 40) * 150 - 
+                           (race == 2) * 100 + rnorm(n, 0, 100)
+
+# Combine into a data frame
+simulated_data_optimistic <- data.frame(
+  race, income_optimistic, wic_participation_optimistic, pre_existing_conditions_optimistic,
+  maternal_nutrition_optimistic, healthcare_access_optimistic, age, birth_weight_optimistic
+)
+
+# Save the data
+write.csv(simulated_data_optimistic, "simulated_wic_data_optimistic.csv", row.names = FALSE)
+
+```
+
+Less Optimistic Data Simulation
+
+```{r}
+
+# Approach 2 : Simulated Data w pessimistic view on program impact
+
+# LESS OPTIMISTIC ABOUT PROGRAM IMPACT
+set.seed(123)
+
+n <- 1000
+
+# Race (1: White, 2: Black, 3: Hispanic, 4: Other)
+race <- sample(1:4, n, replace = TRUE, prob = c(0.5, 0.2, 0.2, 0.1))
+
+# Income, affected by race and restricted to 0-100 percentile range
+income_pessimistic <- rnorm(n, mean = 50, sd = 16)
+
+
+# WIC Participation, based on income
+cutoff <- 25
+wic_participation_pessimistic <- ifelse(income_pessimistic <= cutoff, 1, 0)
+
+# Pre-existing Conditions (PEC)
+pre_existing_conditions_pessimistic <- rbinom(n, 1, 0.2)
+
+# Maternal Nutrition, with lower impact from WIC and other factors
+maternal_nutrition_pessimistic <- 50 + (10 * wic_participation_pessimistic) - 
+                                  (5 * pre_existing_conditions_pessimistic) + 
+                                  (1.5 * income_pessimistic) + rnorm(n, 0, 2)
+
+# Healthcare Access, with lower influence from WIC and greater disparity by race
+healthcare_access_pessimistic <- 25 + (7.5 * wic_participation_pessimistic) - 
+                                   (2 * income_pessimistic) - 
+                                   (race == 2) * 10 + rnorm(n, 0, 2)
+
+# Age of the mother
+age <- sample(15:45, n, replace = TRUE)
+
+# Birth Weight, with a stronger relationship to Income
+birth_weight_pessimistic <- 2500 + 
+                            (85 * wic_participation_pessimistic) + 
+                            (6 * maternal_nutrition_pessimistic) + 
+                            (6 * healthcare_access_pessimistic) - 
+                            (20 * pre_existing_conditions_pessimistic) + 
+                            (8 * income_pessimistic) -  
+                            (age < 20) * 200 - 
+                            (age > 40) * 200 - 
+                            (race == 2) * 150 + rnorm(n, 0, 100)
+
+# Combine into a data frame
+simulated_data_pessimistic <- data.frame(
+  race, income_pessimistic, wic_participation_pessimistic, pre_existing_conditions_pessimistic,
+  maternal_nutrition_pessimistic, healthcare_access_pessimistic, age, birth_weight_pessimistic
+)
+
+# Save the data
+write.csv(simulated_data_pessimistic, "simulated_wic_data_pessimistic.csv", row.names = FALSE)
+
+```
