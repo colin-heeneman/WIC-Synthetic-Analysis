@@ -1,6 +1,6 @@
 ---
-title: "Only Thing Elon Is Right About"
-author: "Simulation Theory"
+title: "WIC Synthetic Data Generation"
+author: "Colin Heeneman, Emily Frost, Samantha Sepulveda"
 format: pdf
 editor: visual
 ---
